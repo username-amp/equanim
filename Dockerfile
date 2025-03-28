@@ -41,7 +41,8 @@ RUN composer run-script post-autoload-dump
 
 # Install Node dependencies and build assets
 RUN npm install
-RUN npm run production
+RUN npm run build
+  # Changed to use build/prod
 
 # Expose port and start PHP-FPM
 EXPOSE 80
