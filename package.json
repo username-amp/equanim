@@ -2,7 +2,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "start": "php artisan inertia:start-ssr",
+        "start": "php artisan serve --host=0.0.0.0 --port=$PORT",
         "build": "vite build",
         "build:ssr": "vite build && vite build --ssr",
         "dev": "vite",
