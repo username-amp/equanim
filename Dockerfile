@@ -31,8 +31,13 @@ WORKDIR /var/www
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --optimize-autoloader --no-scripts -vvv
 COPY . .
-RUN composer run-script post-autoload-dump
 
+# Debug environment variables
+RUN mkdir -p storage/logs
+RUN echo "DB_HOST: ${DB_HOST}" >> storage/logs/env.log
+RUN echo "DB_USERNAME: ${DB_USERNAME}" >> storage/logs/env.log
+
+RUN composer run-script post-autoload-dump
 RUN npm install
 RUN npm run build
 
