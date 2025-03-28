@@ -20,21 +20,26 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip intl opca
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+...
+
 WORKDIR /var/www
 
+# Copy composer files first
 COPY composer.json composer.lock ./
 
-# Debugging steps
-RUN php -v
-RUN php -m
-RUN composer --version
+# Install dependencies without running scripts
+RUN composer install --no-dev --optimize-autoloader --no-scripts -vvv
 
-RUN composer install --no-dev --optimize-autoloader -vvv
-
+# Now copy all application code
 COPY . .
 
+# Run post-install scripts now that artisan is available
+RUN composer run-script post-autoload-dump
+
+# Continue with npm steps
 RUN npm install
 RUN npm run production
+
 
 EXPOSE 80
 
