@@ -30,7 +30,10 @@ WORKDIR /var/www
 
 # Copy Composer files and install PHP dependencies
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader -vvv
+RUN php -m | grep -E 'intl|zip'
+
+
 
 # Copy the rest of the application code
 COPY . .
