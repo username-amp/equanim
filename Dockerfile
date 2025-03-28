@@ -13,10 +13,13 @@ RUN apt-get update && apt-get install -y \
     nodejs \
     npm
 
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
 # Install PHP extensions needed by Laravel
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# Set working directory inside the container
+# Set working directory
 WORKDIR /var/www
 
 # Copy Composer files and install PHP dependencies
@@ -30,7 +33,7 @@ COPY . .
 RUN npm install
 RUN npm run production
 
-# Expose port 80 (Render will map $PORT to this port)
+# Expose port 80 (Render will map $PORT to this)
 EXPOSE 80
 
 # Start PHP-FPM
