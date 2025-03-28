@@ -13,7 +13,7 @@ interface OnboardingForm {
 
 export default function Onboard() {
     const [step, setStep] = useState(1);
-    const [bgImage, setBgImage] = useState('https://cdn.prod.website-files.com/62f12835ca91e9749643da9d/66841886a696ea14d0ef5ad4_why_you_should_remember.webp');
+    const [bgImage] = useState('https://cdn.prod.website-files.com/62f12835ca91e9749643da9d/66841886a696ea14d0ef5ad4_why_you_should_remember.webp');
     const { data, setData, post, processing } = useForm<OnboardingForm>({
         preferred_time: 'morning',
         daily_goal_minutes: 10,

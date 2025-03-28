@@ -4,33 +4,31 @@ import AppLayout from '@/layouts/app-layout';
 import { Head } from '@inertiajs/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Flower2, Info } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function BreathePage() {
     const [phase, setPhase] = useState<'inhale' | 'hold' | 'exhale' | 'rest'>('inhale');
     const [isActive, setIsActive] = useState(false);
-    const [count, setCount] = useState(0);
+    const countRef = useRef(0); // Use a ref to track count without triggering re-renders
 
     useEffect(() => {
         let timer: NodeJS.Timeout;
         if (isActive) {
             timer = setInterval(() => {
-                setCount((prevCount) => {
-                    if (phase === 'inhale' && prevCount >= 4) {
-                        setPhase('hold');
-                        return 0;
-                    } else if (phase === 'hold' && prevCount >= 7) {
-                        setPhase('exhale');
-                        return 0;
-                    } else if (phase === 'exhale' && prevCount >= 8) {
-                        setPhase('rest');
-                        return 0;
-                    } else if (phase === 'rest' && prevCount >= 4) {
-                        setPhase('inhale');
-                        return 0;
-                    }
-                    return prevCount + 1;
-                });
+                countRef.current++;
+                if (phase === 'inhale' && countRef.current >= 4) {
+                    setPhase('hold');
+                    countRef.current = 0;
+                } else if (phase === 'hold' && countRef.current >= 7) {
+                    setPhase('exhale');
+                    countRef.current = 0;
+                } else if (phase === 'exhale' && countRef.current >= 8) {
+                    setPhase('rest');
+                    countRef.current = 0;
+                } else if (phase === 'rest' && countRef.current >= 4) {
+                    setPhase('inhale');
+                    countRef.current = 0;
+                }
             }, 1000);
         }
         return () => clearInterval(timer);
@@ -130,7 +128,7 @@ export default function BreathePage() {
                                             onClick={() => {
                                                 setIsActive(false);
                                                 setPhase('inhale');
-                                                setCount(0);
+                                                countRef.current = 0;
                                             }}
                                             variant="outline"
                                             className="border-purple-400 px-6 py-2 text-purple-400 transition-all hover:scale-105 hover:bg-purple-50 hover:shadow-lg hover:shadow-purple-500/30"

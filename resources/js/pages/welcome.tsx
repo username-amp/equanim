@@ -1,17 +1,10 @@
 import AppLogo from '@/components/app-logo';
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { motion, useInView, useScroll, useSpring, useTransform, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Heart, Leaf, Sparkles, Star, Sun, Users, type LucideIcon } from 'lucide-react';
-import { useRef, useState, useEffect } from 'react';
+import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { ArrowRight, Heart, Leaf, Sparkles, Sun } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
-// Custom hook for scroll animations
-function useScrollAnimation(threshold = 0.2) {
-    const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, amount: threshold });
-
-    return { ref, isInView };
-}
 
 // Floating animation for background elements
 function FloatingElement({ delay = 0, children }: { delay?: number; children: React.ReactNode }) {
@@ -32,70 +25,7 @@ function FloatingElement({ delay = 0, children }: { delay?: number; children: Re
     );
 }
 
-// Feature Card Component
-function FeatureCard({ icon: Icon, title, description, index }: { icon: LucideIcon; title: string; description: string; index: number }) {
-    const { ref, isInView } = useScrollAnimation();
 
-    const bgColor = index === 0 ? 'bg-violet-500/10' : index === 1 ? 'bg-purple-500/10' : 'bg-violet-600/10';
-    const textColor = index === 0 ? 'text-violet-600' : index === 1 ? 'text-purple-600' : 'text-violet-700';
-
-    return (
-        <motion.div
-            ref={ref}
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-            transition={{ duration: 0.5, delay: index * 0.2 }}
-            className="group relative rounded-2xl bg-white p-8 shadow-md transition-all hover:shadow-xl"
-        >
-            <div className="absolute -inset-4 z-0 rounded-2xl bg-gradient-to-r from-violet-500 to-purple-600 opacity-0 blur transition-all group-hover:opacity-10"></div>
-            <div className="relative z-10">
-                <div className={`mb-6 inline-flex rounded-xl ${bgColor} p-3`}>
-                    <Icon className={`h-6 w-6 ${textColor}`} />
-                </div>
-                <h3 className="mb-3 text-xl font-semibold">{title}</h3>
-                <p className="text-gray-600">{description}</p>
-            </div>
-        </motion.div>
-    );
-}
-
-// Testimonial Card Component
-function TestimonialCard({ content, author, role, image, index }: { content: string; author: string; role: string; image: string; index: number }) {
-    const { ref, isInView } = useScrollAnimation();
-
-    return (
-        <motion.div
-            ref={ref}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
-            transition={{ duration: 0.5, delay: index * 0.2 }}
-            className="flex flex-col justify-between rounded-2xl bg-white p-8 shadow-md"
-        >
-            <div>
-                <div className="flex gap-0.5 text-violet-500">
-                    {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="h-5 w-5 fill-current" />
-                    ))}
-                </div>
-                <p className="mt-4 text-lg text-gray-600 italic">{content}</p>
-            </div>
-            <div className="mt-8 flex items-center gap-4">
-                <img
-                    src={image}
-                    alt={author}
-                    onError={(e) => {
-                        e.currentTarget.src = `https://ui-avatars.com/api/?name=${author}&background=6366f1&color=fff`;
-                    }}
-                    className="h-12 w-12 rounded-full object-cover bg-indigo-100"
-                />
-                <div>
-                    <h4 className="font-semibold">{author}</h4>
-                    <p className="text-sm text-gray-600">{role}</p>
-                </div>
-            </div>
-        </motion.div>
-    );
-}
 
 const teachers = [
     {
@@ -134,23 +64,6 @@ export default function LandingPage() {
     const progressScale = useTransform(scaleProgress, [0, 1], [0.8, 1]);
     const progressOpacity = useTransform(scaleProgress, [0, 0.1], [0, 1]);
 
-    const features = [
-        {
-            icon: Star,
-            title: 'Progress Insights',
-            description: 'Track your mood, streaks, and personal growth with detailed analytics.',
-        },
-        {
-            icon: Users,
-            title: 'Community Support',
-            description: 'Join live sessions and connect with mindful peers worldwide.',
-        },
-        {
-            icon: Heart,
-            title: 'Mindful Moments',
-            description: 'Find calm and clarity with guided meditations and relaxing sounds.',
-        },
-    ];
 
     const testimonials = [
         {
@@ -206,7 +119,7 @@ export default function LandingPage() {
         }, 5000);
 
         return () => clearInterval(interval);
-    }, []);
+    }, [testimonials.length]);
 
     return (
         <>

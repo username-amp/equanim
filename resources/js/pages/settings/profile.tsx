@@ -9,7 +9,7 @@ import SettingsLayout from '@/layouts/settings/layout';
 import { type BreadcrumbItem, type SharedData } from '@/types';
 import { Transition } from '@headlessui/react';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
-import { AlertCircle, CheckCircle2, Mail, User } from 'lucide-react';
+import { CheckCircle2, Mail, User } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
