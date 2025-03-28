@@ -41,23 +41,25 @@ return [
         ],
 
         'mysql' => [
-             'driver' => 'mysql',
-    'host' => env('MYSQLHOST', '127.0.0.1'),
-    'port' => env('MYSQLPORT', '3306'),
-    'database' => env('MYSQLDATABASE', 'forge'),
-    'username' => env('MYSQLUSER', 'forge'),
-    'password' => env('MYSQLPASSWORD', ''),
-    'unix_socket' => env('DB_SOCKET', ''),
-    'charset' => 'utf8mb4',
-            'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
+            // Railway-specific configuration
+            'driver' => 'mysql',
+            'host' => env('RAILWAY_PRIVATE_DOMAIN', env('DB_HOST', '127.0.0.1')),
+            'port' => env('DB_PORT', '3306'),
+            'database' => env('MYSQL_DATABASE', env('DB_DATABASE', 'railway')),
+            'username' => env('MYSQLUSER', env('DB_USERNAME', 'root')),
+            'password' => env('MYSQL_ROOT_PASSWORD', env('DB_PASSWORD', '')),
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-                 // PDO::ATTR_SSL_VERIFY_SERVER_CERT => false,
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
+                'options' => extension_loaded('pdo_mysql') ? [
+        PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
+        PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+    ] : [],
+
         ],
 
         'mariadb' => [
